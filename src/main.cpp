@@ -31,11 +31,21 @@ index AI_gamer(int board[3][3], int mark) {
   index tmp;
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
-      if (board[i][(j + 3) % 3] == antimark) {
-        if (board[i][(j + 4) % 3] == antimark)
-          res.setter(i, (j + 5) % 3);
-        else if (board[i][(j + 5) % 3] == antimark)
-          res.setter(i, (j + 4) % 3);
+      if (board[i][(j + 3) % 3] == mark) {
+        if (board[i][(j + 4) % 3] == mark) {
+          if (board[i][(j + 5) % 3] == -1)
+            res.setter(i, (j + 5) % 3);
+        } else if (board[i][(j + 5) % 3] == mark) {
+          if (board[i][(j + 5) % 3] == -1)
+            res.setter(i, (j + 4) % 3);
+        }
+        if (board[(i + 4) % 3][j] == mark) {
+          if (board[(i + 5) % 3][j] == -1)
+            res.setter((i + 5) % 3, j);
+        } else if (board[(i + 5) % 3][j] == mark) {
+          if (board[(i + 4) % 3][j] == -1)
+            res.setter((i + 4) % 3, j);
+        }
       }
     }
   }
@@ -43,11 +53,22 @@ index AI_gamer(int board[3][3], int mark) {
     return res;
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
-      if (board[i][(j + 3) % 3] == mark) {
-        if (board[i][(j + 4) % 3] == mark)
-          res.setter(i, (j + 5) % 3);
-        else if (board[i][(j + 5) % 3] == mark)
-          res.setter(i, (j + 4) % 3);
+      if (board[i][(j + 3) % 3] == antimark) {
+        if (board[i][(j + 4) % 3] == antimark) {
+          if (board[i][(j + 5) % 3] == -1)
+            res.setter(i, (j + 5) % 3);
+        } else if (board[i][(j + 5) % 3] == antimark) {
+          if (board[i][(j + 5) % 3] == -1) {
+            res.setter(i, (j + 4) % 3);
+          }
+        }
+        if (board[(i + 4) % 3][j] == antimark) {
+          if (board[(i + 5) % 3][j] == -1)
+            res.setter((i + 5) % 3, j);
+        } else if (board[(i + 5) % 3][j] == antimark) {
+          if (board[(i + 4) % 3][j] == -1)
+            res.setter((i + 4) % 3, j);
+        }
       }
     }
   }
@@ -130,7 +151,7 @@ int main() {
   int column = 0, row = 0;
   int res = -1;
   index ai_point;
-  while (true) {
+  while (count < 9) {
     res = winner_checker(board_logic);
     if (res >= 0) {
       if (res == 0)
@@ -144,8 +165,8 @@ int main() {
         std::cout << "insert row and column" << std::endl;
         std::cin.clear();
         std::cin >> row >> column;
-        std::cout << "column: " << column << " row: " << row << std::endl;
-        std::cout << "count: " << count << std::endl;
+        // std::cout << "column: " << column << " row: " << row << std::endl;
+        // std::cout << "count: " << count << std::endl;
         if (row > 3 || row < 0) {
           throw std::invalid_argument("invalid row\n");
         }
@@ -173,12 +194,15 @@ int main() {
       } else {
         board[ai_point.get_i()][ai_point.get_j()] = 'o';
         board_logic[ai_point.get_i()][ai_point.get_j()] = 1;
+        printer(board);
       }
-      printer(board);
       count++;
     } else {
       std::cout << "this element has been taken!" << std::endl;
     }
   }
+  if (count == 9 && res < 0)
+    printer(board);
+  // std::cout << "the game finished tie!" << std::endl;
   return 0;
 }
