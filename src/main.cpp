@@ -1,7 +1,6 @@
 #include <iostream>
 #include <limits>
 #include <list>
-#include <sys/socket.h>
 #include <vector>
 
 class index {
@@ -46,9 +45,19 @@ index AI_gamer(int board[3][3], int mark) {
           if (board[(i + 4) % 3][j] == -1)
             res.setter((i + 4) % 3, j);
         }
+        if (i == j || i + j == 2) {
+          if (board[(i + 1) % 3][(j + 1) % 3] == mark) {
+            if (board[(i + 2) % 3][(j + 2) % 3] == -1)
+              res.setter((i + 2) % 3, (j + 2) % 3);
+          } else if (board[(i + 2) % 3][(j + 2) % 3] == mark) {
+            if (board[(i + 1) % 3][(j + 1) % 3] == -1)
+              res.setter((i + 1) % 3, (j + 1) % 3);
+          }
+        }
       }
     }
   }
+
   if (res.get_i() != -1)
     return res;
   for (int i = 0; i < 3; i++) {
@@ -68,6 +77,15 @@ index AI_gamer(int board[3][3], int mark) {
         } else if (board[(i + 5) % 3][j] == antimark) {
           if (board[(i + 4) % 3][j] == -1)
             res.setter((i + 4) % 3, j);
+        }
+        if (i == j || i + j == 2) {
+          if (board[(i + 1) % 3][(j + 1) % 3] == antimark) {
+            if (board[(i + 2) % 3][(j + 2) % 3] == -1)
+              res.setter((i + 2) % 3, (j + 2) % 3);
+          } else if (board[(i + 2) % 3][(j + 2) % 3] == antimark) {
+            if (board[(i + 1) % 3][(j + 1) % 3] == -1)
+              res.setter((i + 1) % 3, (j + 1) % 3);
+          }
         }
       }
     }
